@@ -1,0 +1,27 @@
+--cpu Cortex-M7.fp.dp
+"lab01_ledq3\startup_stm32f767xx.o"
+"lab01_ledq3\main.o"
+"lab01_ledq3\gpio.o"
+"lab01_ledq3\stm32f7xx_it.o"
+"lab01_ledq3\stm32f7xx_hal_msp.o"
+"lab01_ledq3\stm32f7xx_hal_cortex.o"
+"lab01_ledq3\stm32f7xx_hal_tim.o"
+"lab01_ledq3\stm32f7xx_hal_tim_ex.o"
+"lab01_ledq3\stm32f7xx_hal_rcc.o"
+"lab01_ledq3\stm32f7xx_hal_rcc_ex.o"
+"lab01_ledq3\stm32f7xx_hal_flash.o"
+"lab01_ledq3\stm32f7xx_hal_flash_ex.o"
+"lab01_ledq3\stm32f7xx_hal_gpio.o"
+"lab01_ledq3\stm32f7xx_hal_dma.o"
+"lab01_ledq3\stm32f7xx_hal_dma_ex.o"
+"lab01_ledq3\stm32f7xx_hal_pwr.o"
+"lab01_ledq3\stm32f7xx_hal_pwr_ex.o"
+"lab01_ledq3\stm32f7xx_hal.o"
+"lab01_ledq3\stm32f7xx_hal_i2c.o"
+"lab01_ledq3\stm32f7xx_hal_i2c_ex.o"
+"lab01_ledq3\stm32f7xx_hal_exti.o"
+"lab01_ledq3\system_stm32f7xx.o"
+--library_type=microlib --strict --scatter "Lab01_LEDq3\Lab01_LEDq3.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Lab01_LEDq3.map" -o Lab01_LEDq3\Lab01_LEDq3.axf

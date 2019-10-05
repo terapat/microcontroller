@@ -1,0 +1,27 @@
+--cpu Cortex-M7.fp.dp
+"lab02_gpio\startup_stm32f767xx.o"
+"lab02_gpio\main.o"
+"lab02_gpio\gpio.o"
+"lab02_gpio\stm32f7xx_it.o"
+"lab02_gpio\stm32f7xx_hal_msp.o"
+"lab02_gpio\stm32f7xx_hal_cortex.o"
+"lab02_gpio\stm32f7xx_hal_tim.o"
+"lab02_gpio\stm32f7xx_hal_tim_ex.o"
+"lab02_gpio\stm32f7xx_hal_rcc.o"
+"lab02_gpio\stm32f7xx_hal_rcc_ex.o"
+"lab02_gpio\stm32f7xx_hal_flash.o"
+"lab02_gpio\stm32f7xx_hal_flash_ex.o"
+"lab02_gpio\stm32f7xx_hal_gpio.o"
+"lab02_gpio\stm32f7xx_hal_dma.o"
+"lab02_gpio\stm32f7xx_hal_dma_ex.o"
+"lab02_gpio\stm32f7xx_hal_pwr.o"
+"lab02_gpio\stm32f7xx_hal_pwr_ex.o"
+"lab02_gpio\stm32f7xx_hal.o"
+"lab02_gpio\stm32f7xx_hal_i2c.o"
+"lab02_gpio\stm32f7xx_hal_i2c_ex.o"
+"lab02_gpio\stm32f7xx_hal_exti.o"
+"lab02_gpio\system_stm32f7xx.o"
+--library_type=microlib --strict --scatter "Lab02_GPIO\Lab02_GPIO.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Lab02_GPIO.map" -o Lab02_GPIO\Lab02_GPIO.axf
