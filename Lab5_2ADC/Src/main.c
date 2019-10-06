@@ -48,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint32_t adc_val[16];
+uint32_t adc_val[15], buffer[15];
+int readPin[2][4]={{0, 5, 6, 7},{8, 9, 11, 12}};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,6 +61,23 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void displayHEX(uint32_t);
+void displayPin(uint32_t);
+void displayNewline();
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+	for (int i =0; i<15; i++)
+	{
+	  adc_val[i] = buffer[i];
+	}
+	for(int i =0; i <2;i++){
+			for(int j =0; j <4;j++){
+				displayPin(readPin[i][j] >= 7 ? readPin[i][j]+1: readPin[i][j]);
+				displayHEX(adc_val[readPin[i][j]]);
+			}
+			displayNewline();
+	}
+}	
 /* USER CODE END 0 */
 
 /**
@@ -69,9 +87,9 @@ void displayHEX(uint32_t);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
   
+	
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -95,7 +113,23 @@ int main(void)
   MX_ADC1_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-	HAL_ADC_Start_DMA(&hadc1, adc_val, 16);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, 0);
+	HAL_ADC_Start_DMA(&hadc1, buffer, 15);
+	/*char mapString[15][50] = {"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														"",
+														""};*/
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,30 +139,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  	while( HAL_ADC_PollForConversion(&hadc1, 100) != HAL_OK ){};
-		adc_val[0] = HAL_ADC_GetValue(&hadc1);
-		if(adc_val[0] >= 0xfff*4/5){
-			GPIOC->BSRR = 0xf000000;
-			GPIOC->BSRR = 0xf00;
-		}
-		else if(adc_val[0] >= 0xfff*3/5){
-			GPIOC->BSRR = 0xf000000;
-			GPIOC->BSRR = 0x700;
-		}
-		else if(adc_val[0] >= 0xfff*2/5){
-			GPIOC->BSRR = 0xf000000;
-			GPIOC->BSRR = 0x300;
-		}
-		else if(adc_val[0] >= 0xfff/5){
-			GPIOC->BSRR = 0xf000000;
-			GPIOC->BSRR = 0x100;
-		}
-		else{
-			GPIOC->BSRR = 0xf000000;
-			GPIOC->BSRR = 0x000;
-		}
+		//for(int i =0; i <2;i++){
+		//	for(int j =0; j <4;j++){
+		//		displayPin(readPin[i][j] >= 7 ? readPin[i][j]+1: readPin[i][j]);
+		//		displayHEX(adc_val[readPin[i][j]]);
+		//	}
+		//	displayNewline();
+		//}
 		
-		displayHEX(adc_val[0]);
 	}
   /* USER CODE END 3 */
 }
@@ -192,9 +210,22 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void displayHEX(uint32_t hex){
 	char buffer [50];
-	sprintf(buffer, "%8.8x", hex);
+	sprintf(buffer, "%8.8x, ", hex);
 	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
-		HAL_UART_Transmit(&huart3, (uint8_t*) &buffer, 8,1000);
+		HAL_UART_Transmit(&huart3, (uint8_t*) &buffer, 10,1000);
+	HAL_Delay(300);
+}
+void displayPin(uint32_t pin){
+	char buffer [50];
+	sprintf(buffer, "%2d :", pin);
+	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
+		HAL_UART_Transmit(&huart3, (uint8_t*) &buffer, 4,1000);
+	//char ch1[2] = "\n\r";
+	//while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
+	//HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 2,1000);
+	//HAL_Delay(300);
+}
+void displayNewline(){
 	char ch1[2] = "\n\r";
 	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
 		HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 2,1000);
