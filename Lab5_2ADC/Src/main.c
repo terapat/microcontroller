@@ -65,7 +65,22 @@ void displayPin(uint32_t);
 void displayNewline();
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7,1);
+	char ch1[12] = "---Half---\n\r";
+	HAL_Delay(1000);
+	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
+		HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 12,1000);
+	
+}
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7,0);
+	char ch1[12] = "---Comp---\n\r";
+	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
+		HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 12,1000);
+	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
+		HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 2,1000);
+	HAL_Delay(1000);
 	for (int i =0; i<15; i++)
 	{
 	  adc_val[i] = buffer[i];
@@ -213,7 +228,7 @@ void displayHEX(uint32_t hex){
 	sprintf(buffer, "%8.8x, ", hex);
 	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
 		HAL_UART_Transmit(&huart3, (uint8_t*) &buffer, 10,1000);
-	HAL_Delay(300);
+	//HAL_Delay(300);
 }
 void displayPin(uint32_t pin){
 	char buffer [50];
@@ -229,7 +244,7 @@ void displayNewline(){
 	char ch1[2] = "\n\r";
 	while(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_TC)==RESET){}
 		HAL_UART_Transmit(&huart3, (uint8_t*) &ch1, 2,1000);
-	HAL_Delay(300);
+	HAL_Delay(1000);
 }
 /* USER CODE END 4 */
 
